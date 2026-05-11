@@ -1,209 +1,568 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name | Portfolio & Blog</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
-        
-        :root {
-            --primary: 234 179 8;
-        }
-        
-        .tail-container {
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        
-        .heading-font {
-            font-family: 'Playfair Display', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio & Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .hero-bg {
-            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
-        }
+    :root {
+      --bg:          #f5f3ee;
+      --bg2:         #ede9e0;
+      --surface:     #ffffff;
+      --border:      #ddd8cc;
+      --text:        #1a1814;
+      --text-muted:  #6b6456;
+      --accent:      #c8571b;
+      --accent2:     #2a4a3e;
+      --gold:        #b89a5a;
+      --nav-bg:      rgba(245,243,238,0.85);
+      --shadow:      0 2px 24px rgba(0,0,0,0.08);
+      --transition:  0.3s cubic-bezier(0.4,0,0.2,1);
+    }
 
-        .nav-link {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .nav-link:hover {
-            color: rgb(234 179 8);
-            transform: translateY(-2px);
-        }
+    [data-theme="dark"] {
+      --bg:          #0f0e0c;
+      --bg2:         #1a1814;
+      --surface:     #1f1d19;
+      --border:      #2e2b24;
+      --text:        #f0ece3;
+      --text-muted:  #8a8070;
+      --accent:      #e06b30;
+      --accent2:     #4a8a72;
+      --gold:        #c8a86a;
+      --nav-bg:      rgba(15,14,12,0.9);
+      --shadow:      0 2px 24px rgba(0,0,0,0.4);
+    }
 
-        .dropdown {
-            animation: dropdown 0.3s ease forwards;
-        }
-        
-        @keyframes dropdown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    html { scroll-behavior: smooth; }
 
-        .blog-card, .project-card {
-            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-        
-        .blog-card:hover, .project-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
-        }
-    </style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .nav-left { display: flex; align-items: center; gap: 2.5rem; }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--accent); }
+
+    /* Dropdown menu */
+    .menu { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+
+    .menu-item { position: relative; }
+
+    .menu-item > a, .menu-item > button {
+      display: flex; align-items: center; gap: 0.35rem;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: none; border: none; cursor: pointer;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: color var(--transition), background var(--transition);
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .menu-item > a:hover, .menu-item > button:hover,
+    .menu-item.active > a, .menu-item.active > button {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    .chevron {
+      width: 12px; height: 12px;
+      transition: transform 0.2s;
+      opacity: 0.6;
+    }
+    .menu-item.open .chevron { transform: rotate(180deg); }
+
+    .dropdown {
+      position: absolute; top: calc(100% + 8px); left: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.5rem;
+      min-width: 200px;
+      box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.2s, transform 0.2s;
+      list-style: none;
+    }
+    .menu-item.open .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+    .dropdown a {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition), background var(--transition);
+    }
+    .dropdown a:hover { color: var(--text); background: var(--bg2); }
+    .dropdown .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+    .dropdown .dot.green { background: var(--accent2); }
+    .dropdown .dot.gold  { background: var(--gold); }
+
+    .dropdown-divider {
+      height: 1px; background: var(--border); margin: 0.4rem 0.5rem;
+    }
+
+    /* Dark mode toggle */
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+    .theme-toggle {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all var(--transition);
+      font-family: 'DM Sans', sans-serif;
+    }
+    .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+    .theme-icon { font-size: 0.9rem; }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 100px 2rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      gap: 4rem;
+    }
+
+    .hero-content { flex: 1; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-tag::before {
+      content: ''; width: 24px; height: 1px; background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+    h1 em { color: var(--accent); font-style: italic; }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--text);
+      color: var(--bg);
+      padding: 0.8rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all var(--transition);
+      letter-spacing: 0.01em;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent;
+      color: var(--text);
+      padding: 0.8rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); transform: translateY(-1px); }
+
+    /* Hero visual */
+    .hero-visual {
+      width: 340px; flex-shrink: 0;
+      display: grid; gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .stat-card .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .stat-card .stat-num span { color: var(--accent); }
+    .stat-card .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .topic-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin: 0.25rem;
+    }
+    .topic-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .topic-pill .dot.g { background: var(--accent2); }
+    .topic-pill .dot.gold { background: var(--gold); }
+
+    /* ── SECTION SHARED ──────────────────────────────── */
+    section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .section-sub { color: var(--text-muted); font-size: 1rem; line-height: 1.7; max-width: 520px; }
+
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ── FEATURED WORK ───────────────────────────────── */
+    .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+
+    .work-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all var(--transition);
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+    .work-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--text-muted); }
+
+    .work-thumb {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      position: relative; overflow: hidden;
+    }
+    .work-thumb.orange { background: linear-gradient(135deg, #f8e8d8 0%, #f0cba8 100%); }
+    .work-thumb.green  { background: linear-gradient(135deg, #d8eae3 0%, #a8d4c0 100%); }
+    .work-thumb.blue   { background: linear-gradient(135deg, #d8e4f0 0%, #a8c0e0 100%); }
+    [data-theme="dark"] .work-thumb.orange { background: linear-gradient(135deg, #2a1e14 0%, #3d2810 100%); }
+    [data-theme="dark"] .work-thumb.green  { background: linear-gradient(135deg, #142018 0%, #1a3024 100%); }
+    [data-theme="dark"] .work-thumb.blue   { background: linear-gradient(135deg, #141a28 0%, #1a2440 100%); }
+
+    .work-body { padding: 1.5rem; }
+    .work-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .work-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .work-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── BLOG ────────────────────────────────────────── */
+    .blog-list { margin-top: 3rem; display: flex; flex-direction: column; gap: 0; }
+
+    .blog-item {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      align-items: start; gap: 2rem;
+      padding: 1.75rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .blog-item:first-child { border-top: 1px solid var(--border); }
+    .blog-item:hover .blog-title { color: var(--accent); }
+    .blog-item:hover .blog-arrow { transform: translate(3px,-3px); }
+
+    .blog-date { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-muted); padding-top: 0.2rem; }
+    .blog-meta .blog-cat {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent); margin-bottom: 0.4rem; font-family: 'DM Mono', monospace;
+    }
+    .blog-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 0.4rem; transition: color var(--transition); }
+    .blog-excerpt { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+    .blog-arrow { color: var(--text-muted); font-size: 1.1rem; transition: transform 0.2s; padding-top: 0.2rem; }
+
+    /* ── ABOUT ───────────────────────────────────────── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: center; margin-top: 3rem; }
+
+    .about-avatar {
+      aspect-ratio: 1;
+      border-radius: 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      position: relative; overflow: hidden;
+    }
+    .about-avatar::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(to top, var(--bg2), transparent);
+    }
+
+    .about-text p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1.25rem; font-size: 0.95rem; }
+
+    .skills-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .skill-tag {
+      padding: 0.35rem 0.85rem;
+      border-radius: 6px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── CONTACT ─────────────────────────────────────── */
+    .contact-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem;
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .contact-link:hover { border-color: var(--text-muted); background: var(--bg2); }
+    .contact-link-icon { font-size: 1.2rem; }
+    .contact-link-text .t { font-weight: 500; font-size: 0.9rem; color: var(--text); }
+    .contact-link-text .s { font-size: 0.8rem; color: var(--text-muted); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-form input, .contact-form textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.9rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color var(--transition), background var(--transition);
+      outline: none;
+      resize: none;
+    }
+    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); }
+    .contact-form textarea { min-height: 110px; }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--text-muted); }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+      max-width: 1100px; margin: 0 auto;
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── SCROLL REVEAL ───────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .reveal:nth-child(3) { transition-delay: 0.2s; }
+    .reveal:nth-child(4) { transition-delay: 0.3s; }
+
+    /* ── HERO ANIMATION ──────────────────────────────── */
+    .hero-content > * { animation: fadeUp 0.7s both; }
+    .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+    .hero-visual { animation: fadeUp 0.7s 0.5s both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero { flex-direction: column; gap: 3rem; padding-top: 90px; }
+      .hero-visual { width: 100%; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .contact-box { grid-template-columns: 1fr; gap: 2rem; }
+      .blog-item { grid-template-columns: 80px 1fr; }
+      .blog-arrow { display: none; }
+      h1 { font-size: 2.6rem; }
+    }
+    @media (max-width: 520px) {
+      .menu { display: none; }
+    }
+  </style>
 </head>
-<body class="tail-container bg-zinc-950 text-zinc-200">
-    <!-- HEADER -->
-    <header class="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-lg border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-zinc-950 font-bold text-xl">Y</div>
-                <a href="#" class="text-2xl font-semibold tracking-tight heading-font">Your Name</a>
-            </div>
+<body>
 
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="#home" class="nav-link text-zinc-300 hover:text-yellow-400">Home</a>
-                
-                <div class="relative group">
-                    <button class="nav-link flex items-center gap-1 text-zinc-300 hover:text-yellow-400">
-                        Portfolio <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-                    </button>
-                    <div class="dropdown absolute hidden group-hover:block pt-4 w-56">
-                        <div class="bg-zinc-900 border border-zinc-700 rounded-2xl py-3 px-2 shadow-2xl">
-                            <a href="#projects" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">All Projects</a>
-                            <a href="#" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">Web Development</a>
-                            <a href="#" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">Design</a>
-                            <a href="#" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">Open Source</a>
-                        </div>
-                    </div>
-                </div>
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="nav-left">
+    <a class="logo" href="#home">A<span>.</span>Portfolio</a>
 
-                <div class="relative group">
-                    <button class="nav-link flex items-center gap-1 text-zinc-300 hover:text-yellow-400">
-                        Blog <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-                    </button>
-                    <div class="dropdown absolute hidden group-hover:block pt-4 w-56">
-                        <div class="bg-zinc-900 border border-zinc-700 rounded-2xl py-3 px-2 shadow-2xl">
-                            <a href="#blog" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">All Articles</a>
-                            <a href="#" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">Technology</a>
-                            <a href="#" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">Design</a>
-                            <a href="#" class="block px-5 py-3 hover:bg-zinc-800 rounded-xl">Tutorials</a>
-                        </div>
-                    </div>
-                </div>
+    <ul class="menu" id="menu">
+      <!-- Work dropdown -->
+      <li class="menu-item" id="dd-work">
+        <button onclick="toggleDD('dd-work')">
+          Work
+          <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+        </button>
+        <ul class="dropdown">
+          <li><a href="#work"><span class="dot"></span> Featured Projects</a></li>
+          <li><a href="#work"><span class="dot orange" style="background:var(--gold)"></span> Case Studies</a></li>
+          <li class="dropdown-divider"></li>
+          <li><a href="#work"><span class="dot green"></span> Open Source</a></li>
+        </ul>
+      </li>
 
-                <a href="#about" class="nav-link text-zinc-300 hover:text-yellow-400">About</a>
-                <a href="#contact" class="nav-link text-zinc-300 hover:text-yellow-400">Contact</a>
-            </nav>
+      <!-- Writing dropdown -->
+      <li class="menu-item" id="dd-writing">
+        <button onclick="toggleDD('dd-writing')">
+          Writing
+          <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+        </button>
+        <ul class="dropdown">
+          <li><a href="#blog"><span class="dot"></span> All Posts</a></li>
+          <li><a href="#blog"><span class="dot green"></span> Engineering</a></li>
+          <li><a href="#blog"><span class="dot gold"></span> Design</a></li>
+          <li><a href="#blog"><span class="dot" style="background:#7c6cba"></span> Philosophy</a></li>
+        </ul>
+      </li>
 
-            <div class="flex items-center gap-4">
-                <button onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center text-xl rounded-2xl hover:bg-zinc-900 transition-colors">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button id="mobile-menu-btn" class="md:hidden w-10 h-10 flex items-center justify-center text-2xl">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </header>
+      <!-- About dropdown -->
+      <li class="menu-item" id="dd-about">
+        <button onclick="toggleDD('dd-about')">
+          About
+          <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+        </button>
+        <ul class="dropdown">
+          <li><a href="#about"><span class="dot green"></span> My Story</a></li>
+          <li><a href="#about"><span class="dot gold"></span> Skills & Tools</a></li>
+          <li class="dropdown-divider"></li>
+          <li><a href="#contact"><span class="dot"></span> Contact Me</a></li>
+        </ul>
+      </li>
 
-    <!-- HERO -->
-    <section id="home" class="hero-bg h-screen flex items-center relative">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h1 class="text-6xl md:text-7xl font-bold heading-font tracking-tighter mb-6">
-                Hi, I'm <span class="text-yellow-400">Your Name</span>
-            </h1>
-            <p class="text-2xl md:text-3xl text-zinc-400 mb-8 max-w-2xl mx-auto">
-                Crafting digital experiences • Sharing knowledge • Building the future
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#projects" class="inline-flex items-center justify-center px-8 py-4 bg-yellow-400 hover:bg-yellow-300 transition-colors text-zinc-950 font-semibold rounded-2xl text-lg">
-                    View My Work
-                </a>
-                <a href="#blog" class="inline-flex items-center justify-center px-8 py-4 border border-zinc-400 hover:border-yellow-400 transition-colors font-medium rounded-2xl text-lg">
-                    Read Latest Articles
-                </a>
-            </div>
-        </div>
-    </section>
+      <li class="menu-item">
+        <a href="#contact">Contact</a>
+      </li>
+    </ul>
+  </div>
 
-    <!-- ABOUT -->
-    <section id="about" class="py-24 bg-zinc-900">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <img src="https://picsum.photos/id/64/800/900" alt="Your Photo" class="rounded-3xl shadow-2xl">
-                </div>
-                <div>
-                    <h2 class="text-5xl heading-font font-bold mb-6">About Me</h2>
-                    <p class="text-lg text-zinc-400 leading-relaxed mb-8">
-                        I'm a passionate developer and writer with years of experience creating beautiful, functional digital products. 
-                        I love clean design, thoughtful code, and sharing what I've learned.
-                    </p>
-                    <a href="#contact" class="inline-block px-8 py-4 bg-yellow-400 text-zinc-950 font-semibold rounded-2xl hover:bg-yellow-300">
-                        Get In Touch
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+      <span class="theme-icon" id="themeIcon">☀️</span>
+      <span id="themeLabel">Light</span>
+    </button>
+  </div>
+</nav>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="py-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl heading-font font-bold mb-12">Selected Projects</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Add more cards as needed -->
-                <div class="project-card bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="https://picsum.photos/id/201/800/500" class="w-full h-64 object-cover">
-                    <div class="p-8">
-                        <h3 class="text-2xl font-semibold mb-2">Project One</h3>
-                        <p class="text-zinc-400">Short description of this amazing project.</p>
-                    </div>
-                </div>
-                <!-- Duplicate the block above for more projects -->
-            </div>
-        </div>
-    </section>
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-tag">Product Designer & Engineer</div>
+    <h1>Crafting ideas<br>into <em>things</em><br>that matter.</h1>
+    <p class="hero-desc">
+      I build thoughtful digital products and share what I learn along the way — from design systems to scalable backends.
+    </p>
+    <div class="hero-actions">
+      <a href="#work" class="btn-primary">View Work →</a>
+      <a href="#blog" class="btn-secondary">Read the Blog</a>
+    </div>
+  </div>
 
-    <!-- BLOG -->
-    <section id="blog" class="py-24 bg-zinc-900">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl heading-font font-bold mb-12">Latest Articles</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="blog-card bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden">
-                    <img src="https://picsum.photos/id/133/800/500" class="w-full h-56 object-cover">
-                    <div class="p-8">
-                        <div class="text-xs text-yellow-400 mb-3">May 11, 2026 • 8 min</div>
-                        <h3 class="font-semibold text-2xl leading-tight mb-4">How I Built This Portfolio</h3>
-                        <p class="text-zinc-400 line-clamp-3">Behind the scenes of creating a clean premium website.</p>
-                    </div>
-                </div>
-                <!-- Add more blog cards here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT -->
-    <footer id="contact" class="bg-black py-20">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="text-4xl heading-font font-bold mb-6">Let's Connect</h2>
-            <a href="mailto:your@email.com" class="inline-block px-10 py-5 bg-white text-zinc-950 font-semibold rounded-2xl hover:bg-yellow-400">
-                Send me an email
-            </a>
-            <div class="mt-16 text-zinc-500">© 2026 Your Name. All rights reserved.</div>
-        </div>
-    </footer>
-
-    <script>
-        function toggleDarkMode() {
-            alert("This template is designed in premium dark mode. You can extend it with light mode if needed.");
-        }
-
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            alert("Mobile menu would open here. You can enhance it later.");
-        });
-    </script>
-</body>
-</html>
+  <div class="hero-visual">
+    <div class="stat-card">
+      <div class="stat-n
