@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balram Shiwakoti — Investor · Engineer · Blogger</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --bg:        #F7F4EF;
+      --bg2:       #EDEAE3;
+      --surface:   #FFFFFF;
+      --border:    #D8D3C8;
+      --text:      #1A1714;
+      --text2:     #5A5550;
+      --text3:     #9A9590;
+      --accent:    #C4783A;
+      --accent2:   #2E5B4F;
+      --gold:      #D4A853;
+      --sidebar-w: 260px;
+      --header-h:  64px;
+      --radius:    10px;
+      --trans:     0.28s cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="dark"] {
+      --bg:      #0F0E0C;
+      --bg2:     #181612;
+      --surface: #1E1C18;
+      --border:  #2E2B25;
+      --text:    #F0EDE6;
+      --text2:   #A8A39A;
+      --text3:   #5E5A53;
+      --accent:  #D98A4A;
+      --accent2: #4A8C7C;
+      --gold:    #D4A853;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background var(--trans), color var(--trans);
+      overflow-x: hidden;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: background var(--trans), border-color var(--trans), transform var(--trans);
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo .initials {
+      width: 46px; height: 46px;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .sidebar-logo .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .sidebar-logo .tagline {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 3px;
+      letter-spacing: .03em;
+    }
+
+    /* NAV */
+    nav { padding: 16px 0; flex: 1; }
+
+    .nav-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text3);
+      padding: 14px 24px 6px;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 24px;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: var(--text2);
+      text-decoration: none;
+      border-radius: 0;
+      cursor: pointer;
+      transition: color var(--trans), background var(--trans);
+      user-select: none;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text);
+      background: var(--bg2);
+    }
+    .nav-link.active {
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .nav-link .nav-icon {
+      width: 16px; height: 16px;
+      opacity: .6;
+      flex-shrink: 0;
+    }
+    .nav-link.active .nav-icon { opacity: 1; }
+    .nav-link .chevron {
+      margin-left: auto;
+      width: 14px; height: 14px;
+      opacity: .5;
+      transition: transform var(--trans);
+    }
+    .nav-item.open > .nav-link .chevron { transform: rotate(180deg); }
+
+    /* Dropdown */
+    .dropdown {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .35s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-item.open .dropdown { max-height: 400px; }
+    .dropdown-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 24px 7px 44px;
+      font-size: 12.5px;
+      color: var(--text3);
+      text-decoration: none;
+      transition: color var(--trans), background var(--trans);
+    }
+    .dropdown-link:hover {
+      color: var(--text);
+      background: var(--bg2);
+    }
+    .dropdown-link::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+      transition: background var(--trans);
+    }
+    .dropdown-link:hover::before { background: var(--accent); }
+
+    /* Sidebar bottom */
+    .sidebar-bottom {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .social-links {
+      display: flex; gap: 10px;
+    }
+    .social-link {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text3);
+      text-decoration: none;
+      font-size: 13px;
+      transition: border-color var(--trans), color var(--trans), background var(--trans);
+    }
+    .social-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-w);
+      right: 0;
+      height: var(--header-h);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 90;
+      transition: background var(--trans), border-color var(--trans), left var(--trans);
+    }
+
+    .header-left {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .menu-toggle {
+      display: none;
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: none;
+      cursor: pointer;
+      align-items: center; justify-content: center;
+      color: var(--text2);
+      transition: all var(--trans);
+    }
+    .menu-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    .breadcrumb {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px;
+      color: var(--text3);
+    }
+    .breadcrumb span { color: var(--text); font-weight: 500; }
+
+    .header-right {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 12px;
+      transition: border-color var(--trans), background var(--trans);
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .search-bar input {
+      background: none; border: none; outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      width: 160px;
+    }
+    .search-bar input::placeholder { color: var(--text3); }
+    .search-bar svg { color: var(--text3); flex-shrink: 0; }
+
+    /* Dark mode toggle */
+    .theme-toggle {
+      width: 36px; height: 36px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text2);
+      transition: all var(--trans);
+      position: relative;
+      overflow: hidden;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+    }
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon {
+      position: absolute;
+      transition: opacity .3s, transform .3s;
+    }
+    [data-theme="light"] .icon-moon { opacity: 0; transform: rotate(90deg) scale(.5); }
+    [data-theme="light"] .icon-sun  { opacity: 1; transform: none; }
+    [data-theme="dark"]  .icon-sun  { opacity: 0; transform: rotate(-90deg) scale(.5); }
+    [data-theme="dark"]  .icon-moon { opacity: 1; transform: none; }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      margin-left: var(--sidebar-w);
+      padding-top: var(--header-h);
+      min-height: 100vh;
+      transition: margin-left var(--trans);
+    }
+
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn .4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    /* ===== HOME PAGE ===== */
+    .hero {
+      padding: 56px 48px 48px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+    }
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 20px; height: 2px;
+      background: var(--accent);
+      border-radius: 1px;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 28px;
+    }
+    .hero-pills {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      background: var(--surface);
+      transition: all var(--trans);
+    }
+    .pill:hover { border-color: var(--accent); color: var(--accent); }
+    .pill-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      min-width: 180px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-num span { color: var(--accent); }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 4px;
+      letter-spacing: .03em;
+    }
+    .stat-divider { height: 1px; background: var(--border); }
+
+    /* Featured Articles */
+    .section {
+      padding: 40px 48px;
+    }
+    .section-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 600;
+      color: var(--text);
+    }
+    .section-link {
+      font-size: 12.5px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 4px;
+      transition: gap var(--trans);
+    }
+    .section-link:hover { gap: 8px; }
+
+    /* Article cards */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .article-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color var(--trans), transform var(--trans), box-shadow var(--trans);
+    }
+    .article-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px color-mix(in srgb, var(--text) 8%, transparent);
+    }
+    .card-img {
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-img-bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px;
+      transition: transform .4s ease;
+    }
+    .article-card:hover .card-img-bg { transform: scale(1.06); }
+    .card-tag {
+      position: absolute;
+      top: 12px; left: 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 9.5px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-weight: 500;
+    }
+    .tag-market  { background: color-mix(in srgb,#C4783A 15%,transparent); color: #C4783A; }
+    .tag-civil   { background: color-mix(in srgb,#2E5B4F 15%,transparent); color: #2E5B4F; }
+    .tag-blog    { background: color-mix(in srgb,#D4A853 15%,transparent); color: #B8892E; }
+    .tag-finance { background: color-mix(in srgb,#7A5BA8 15%,transparent); color: #7A5BA8; }
+    .tag-life    { background: color-mix(in srgb,#C4404A 15%,transparent); color: #C4404A; }
+
+    .card-body { padding: 18px 20px 20px; }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px; font-weight: 600;
+      line-height: 1.4;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .card-excerpt {
+      font-size: 12.5px;
+      color: var(--text3);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .card-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px;
+      color: var(--text3);
+    }
+    .card-meta-left { display: flex; align-items: center; gap: 10px; }
+    .read-time {
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* Featured (wide card) */
+    .article-card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+    .article-card.featured .card-img { height: 100%; min-height: 200px; }
+    .article-card.featured .card-title { font-size: 20px; }
+    .article-card.featured .card-excerpt { font-size: 13.5px; }
+
+    /* Newsletter */
+    .newsletter {
+      margin: 0 48px 40px;
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent) 12%, var(--surface)),
+        color-mix(in srgb, var(--accent2) 8%, var(--surface)));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .newsletter-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .newsletter-text p {
+      font-size: 13px; color: var(--text2); line-height: 1.6;
+    }
+    .newsletter-form {
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+    .newsletter-form input {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      width: 220px;
+      transition: border-color var(--trans);
+    }
+    .newsletter-form input:focus { border-color: var(--accent); }
+    .btn-primary {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity var(--trans), transform var(--trans);
+      white-space: nowrap;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+
+    /* ===== ABOUT PAGE ===== */
+    .about-hero {
+      padding: 56px 48px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+    .about-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .about-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px; font-weight: 700;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .about-bio {
+      font-size: 14.5px;
+      color: var(--text2);
+      line-height: 1.8;
+    }
+    .about-bio p + p { margin-top: 14px; }
+    .about-photo-frame {
+      aspect-ratio: 3/4;
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--bg2), var(--border));
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .about-photo-frame .big-initial {
+      font-family: 'Playfair Display', serif;
+      font-size: 96px; font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+    }
+    .about-photo-frame .photo-label {
+      font-size: 12px;
+      color: var(--text3);
+    }
+    .about-photo-frame .corner-tag {
+      position: absolute;
+      bottom: 16px; left: 16px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 40px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .expertise-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color var(--trans), transform var(--trans);
+    }
+    .expertise-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .expertise-icon {
+      font-size: 28px; margin-bottom: 12px;
+    }
+    .expertise-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px; font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .expertise-desc {
+      font-size: 12.5px;
+      color: var(--text3);
+      line-height: 1.65;
+    }
+
+    /* ===== ARTICLES PAGE ===== */
+    .articles-page { padding: 40px 48px; }
+    .page-heading {
+      margin-bottom: 32px;
+    }
+    .page-heading h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .page-heading p { font-size: 14px; color: var(--text2); }
+
+    .filter-bar {
+      display: flex; gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 7px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all var(--trans);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-page { padding: 40px 48px; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 28px;
+    }
+    .contact-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .contact-info p {
+      font-size: 13.5px;
+      color: var(--text2);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .contact-detail {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text2);
+    }
+    .contact-detail svg { color: var(--accent); flex-shrink: 0; }
+    .contact-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text2);
+      margin-bottom: 6px;
+      letter-spacing: .03em;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--trans), background var(--trans);
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .form-textarea { resize: vertical; min-height: 110px; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text3);
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 0px; }
+      .sidebar {
+        transform: translateX(-260px);
+        width: 260px;
+        box-shadow: 8px 0 40px rgba(0,0,0,.15);
+      }
+      .sidebar.open { transform: translateX(0); --sidebar-w: 260px; }
+      .header { left: 0; }
+      .main { margin-left: 0; }
+      .menu-toggle { display: flex; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: row; justify-content: space-around; }
+      .about-hero { grid-template-columns: 1fr; }
+      .about-photo-frame { max-height: 200px; aspect-ratio: auto; flex-direction: row; }
+      .expertise-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .newsletter { flex-direction: column; }
+      .article-card.featured { grid-template-columns: 1fr; }
+      .article-card.featured .card-img { height: 180px; }
+      .section { padding: 32px 24px; }
+      .hero { padding: 32px 24px; }
+      .newsletter { margin: 0 24px 32px; }
+    }
+
+    /* Overlay */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 90;
+      backdrop-filter: blur(2px);
+    }
+    .overlay.show { display: block; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* Quote accent */
+    .quote-block {
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      background: var(--surface);
+      border-radius: 0 10px 10px 0;
+      margin: 24px 0;
+    }
+    .quote-block p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--text2);
+      line-height: 1.65;
+    }
+    .quote-block cite {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 8px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Overlay for mobile -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="initials">BS</div>
+    <div class="name">Balram Shiwakoti</div>
+    <div class="tagline">Investor · Engineer · Blogger</div>
+  </div>
+
+  <nav>
+    <div class="nav-section-label">Navigation</div>
+
+    <div class="nav-item">
+      <a class="nav-link active" onclick="showPage('home', this)">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+        Home
+      </a>
+    </div>
+
+    <div class="nav-item">
+      <a class="nav-link" onclick="showPage('about', this)">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        About Me
+      </a>
+    </div>
+
+    <div class="nav-section-label">Content</div>
+
+    <!-- Articles dropdown -->
+    <div class="nav-item" id="nav-articles">
+      <a class="nav-link" onclick="toggleDropdown('nav-articles', event)">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>
+        Articles
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 6L8 9.5 11.5 6"/></svg>
+      </a>
+      <div class="dropdown">
+        <a class="dropdown-link" onclick="showPage('articles', null)">All Articles</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Stock Market</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Civil Engineering</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Personal Finance</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Life &amp; Mindset</a>
+      </div>
+    </div>
+
+    <!-- Investments dropdown -->
+    <div class="nav-item" id="nav-invest">
+      <a class="nav-link" onclick="toggleDropdown('nav-invest', event)">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+        Investments
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 6L8 9.5 11.5 6"/></svg>
+      </a>
+      <div class="dropdown">
+        <a class="dropdown-link" onclick="showPage('articles', null)">Market Analysis</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Stock Picks</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Portfolio Strategy</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Beginner Guides</a>
+      </div>
+    </div>
+
+    <!-- Engineering dropdown -->
+    <div class="nav-item" id="nav-eng">
+      <a class="nav-link" onclick="toggleDropdown('nav-eng', event)">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+        Engineering
+        <svg class="chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 6L8 9.5 11.5 6"/></svg>
+      </a>
+      <div class="dropdown">
+        <a class="dropdown-link" onclick="showPage('articles', null)">Structural Design</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Project Management</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Career Tips</a>
+        <a class="dropdown-link" onclick="showPage('articles', null)">Industry News</a>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Other</div>
+
+    <div class="nav-item">
+      <a class="nav-link" onclick="showPage('contact', this)">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+        Contact
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="social-links">
+      <a class="social-link" title="Twitter/X" href="#">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a class="social-link" title="LinkedIn" href="#">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a class="social-link" title="GitHub" href="#">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a class="social-link" title="RSS" href="#">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.18 15.64a2.18 2.18 0 012.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 012.18-2.18M4 4.44A15.56 15.56 0 0119.56 20h-2.83A12.73 12.73 0 004 7.27V4.44m0 5.66a9.9 9.9 0 019.9 9.9h-2.83A7.07 7.07 0 004 12.93V10.1z"/></svg>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-left">
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <rect y="2" width="16" height="1.5" rx=".75"/>
+        <rect y="7.25" width="16" height="1.5" rx=".75"/>
+        <rect y="12.5" width="16" height="1.5" rx=".75"/>
+      </svg>
+    </button>
+    <div class="breadcrumb">
+      <span id="breadcrumb-text">Home</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="search-bar">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+      <input type="text" placeholder="Search articles…"/>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <!-- Sun -->
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <!-- Moon -->
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <!-- HOME PAGE -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <div>
+        <div class="hero-eyebrow">Welcome to my corner of the internet</div>
+        <h1 class="hero-title">
+          Ideas at the intersection of<br>
+          <em>markets, structures &amp; life.</em>
+        </h1>
+        <p class="hero-sub">
+          I'm Balram — a stock market investor, civil engineer, and writer. I share what I learn about building wealth, constructing resilient systems, and living with intention.
+        </p>
+        <div class="hero-pills">
+          <span class="pill"><span class="pill-dot" style="background:#C4783A"></span> Stock Market</span>
+          <span class="pill"><span class="pill-dot" style="background:#2E5B4F"></span> Civil Engineering</span>
+          <span class="pill"><span class="pill-dot" style="background:#D4A853"></span> Personal Finance</span>
+          <span class="pill"><span class="pill-dot" style="background:#7A5BA8"></span> Life &amp; Mindset</span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">80<span>+</span></div>
+          <div class="stat-label">Articles Written</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">12<span>K</span></div>
+          <div class="stat-label">Monthly Readers</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">8<span>+</span></div>
+          <div class="stat-label">Years Investing</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Featured Articles</h2>
+        <a class="section-link" onclick="showPage('articles', null)">View all →</a>
+      </div>
+      <div class="articles-grid">
+        <!-- Featured wide card -->
+        <div class="article-card featured">
+          <div class="card-img">
+            <div class="card-img-bg" style="background:linear-gradient(135deg,#1a3a2a,#2E5B4F);">📈</div>
+            <span class="card-tag tag-market">Stock Market</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Why Most Retail Investors Lose Money — And How to Be the Exception</div>
+            <div class="card-excerpt">The game is rigged — but not in the way you think. After a decade in the markets, I've identified three core behavioural traps that destroy returns for the average investor. Here's how to avoid them.</div>
+            <div class="card-meta">
+              <div class="card-meta-left">
+                <span>May 8, 2026</span>
+                <span class="read-time">
+                  <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+                  8 min read
+                </span>
+              </div>
+              <span>💬 24 comments</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img">
+            <div class="card-img-bg" style="background:linear-gradient(135deg,#1c2a3a,#2a4060);">🏗️</div>
+            <span class="card-tag tag-civil">Engineering</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">The Art of Estimating: How Engineers Think About Uncertainty</div>
+            <div class="card-excerpt">Precision is the enemy of good engineering. Learn how seasoned civil engineers handle unknowns without grinding to a halt.</div>
+            <div class="card-meta">
+              <div class="card-meta-left">
+                <span>Apr 30, 2026</span>
+                <span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 6 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img">
+            <div class="card-img-bg" style="background:linear-gradient(135deg,#3a2a10,#6b4f20);">💰</div>
+            <span class="card-tag tag-finance">Finance</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Salary to Surplus: Building Wealth on an Engineer's Income</div>
+            <div class="card-excerpt">A practical, no-fluff guide to making your monthly salary work harder — from someone who's done it.</div>
+            <div class="card-meta">
+              <div class="card-meta-left">
+                <span>Apr 20, 2026</span>
+                <span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 10 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img">
+            <div class="card-img-bg" style="background:linear-gradient(135deg,#1e1a2e,#3a2e5e);">🧠</div>
+            <span class="card-tag tag-blog">Mindset</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">The Engineer's Mindset: Systems Thinking for Everyday Life</div>
+            <div class="card-excerpt">How thinking in systems — rather than events — transformed my approach to investing, health, and relationships.</div>
+            <div class="card-meta">
+              <div class="card-meta-left">
+                <span>Apr 14, 2026</span>
+                <span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 7 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="newsletter">
+      <div class="newsletter-text">
+        <h3>Join 3,000+ curious readers</h3>
+        <p>New articles on markets, engineering, and life delivered every week. No spam, ever.</p>
+      </div>
+      <div class="newsletter-form">
+        <input type="email" placeholder="your@email.com"/>
+        <button class="btn-primary">Subscribe</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>© 2026 Balram Shiwakoti · All rights reserved</span>
+      <span>Made with ❤️ &amp; curiosity · <a href="#">Privacy</a></span>
+    </div>
+  </div>
+
+  <!-- ABOUT PAGE -->
+  <div class="page" id="page-about">
+    <div class="about-hero">
+      <div>
+        <div class="about-eyebrow">About me</div>
+        <h1 class="about-title">Balram Shiwakoti</h1>
+        <div class="about-bio">
+          <p>I wear three hats — and I wear them proudly. By profession, I'm a civil engineer. By passion, I'm a stock market investor. And through this blog, I'm a writer trying to make sense of the overlap between building physical things and building financial ones.</p>
+          <p>I started investing in stocks long before it was fashionable, driven by the same first-principles thinking I use in structural design. The result? A personal philosophy that treats portfolios the way I treat buildings — engineered for resilience, stress-tested, and built to last.</p>
+          <p>This blog is where I share my honest learnings — what worked, what didn't, and what I'm still figuring out. No fluff, no hype. Just ideas.</p>
+        </div>
+        <div class="quote-block" style="margin-top:28px;">
+          <p>"Compound interest is the eighth wonder of the world. Good engineering is what keeps the structure standing long enough to collect it."</p>
+          <cite>— Balram Shiwakoti</cite>
+        </div>
+      </div>
+      <div class="about-photo-frame">
+        <div class="big-initial">B</div>
+        <div class="photo-label">Balram Shiwakoti</div>
+        <div class="corner-tag">Since 2016</div>
+      </div>
+    </div>
+
+    <div class="expertise-grid">
+      <div class="expertise-card">
+        <div class="expertise-icon">📈</div>
+        <div class="expertise-title">Stock Market Investor</div>
+        <div class="expertise-desc">8+ years of active investing across equities, ETFs, and sector funds. I focus on value investing with a long-term horizon, using fundamental analysis and macroeconomic awareness.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="expertise-icon">🏗️</div>
+        <div class="expertise-title">Civil Engineer</div>
+        <div class="expertise-desc">Professional civil engineer with expertise in structural design and project management. I bring an engineer's rigour and precision to everything I analyse and write about.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="expertise-icon">✍️</div>
+        <div class="expertise-title">Blogger & Writer</div>
+        <div class="expertise-desc">Writing for over five years, my blog bridges the gap between financial literacy and technical thinking — making complex topics accessible, practical, and actionable.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Recent Writing</h2>
+        <a class="section-link" onclick="showPage('articles', null)">All articles →</a>
+      </div>
+      <div class="articles-grid">
+        <div class="article-card">
+          <div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#1a3a2a,#2E5B4F);">📊</div><span class="card-tag tag-market">Market</span></div>
+          <div class="card-body">
+            <div class="card-title">Reading Balance Sheets Like an Engineer</div>
+            <div class="card-excerpt">Structural analysis and financial analysis share more than you'd think.</div>
+            <div class="card-meta"><span>May 2, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 9 min</span></div>
+          </div>
+        </div>
+        <div class="article-card">
+          <div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#3a2a10,#6b4f20);">🏛️</div><span class="card-tag tag-life">Life</span></div>
+          <div class="card-body">
+            <div class="card-title">Discipline Over Motivation: Lessons from the Construction Site</div>
+            <div class="card-excerpt">Motivation fades. Systems keep the project moving regardless.</div>
+            <div class="card-meta"><span>Apr 25, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 5 min</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>© 2026 Balram Shiwakoti</span>
+      <span><a href="#">Back to top ↑</a></span>
+    </div>
+  </div>
+
+  <!-- ARTICLES PAGE -->
+  <div class="page" id="page-articles">
+    <div class="articles-page">
+      <div class="page-heading">
+        <h1>All Articles</h1>
+        <p>Thoughts on markets, engineering, finance, and life — published regularly.</p>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Stock Market</button>
+        <button class="filter-btn">Civil Engineering</button>
+        <button class="filter-btn">Personal Finance</button>
+        <button class="filter-btn">Life &amp; Mindset</button>
+      </div>
+      <div class="articles-grid">
+        <div class="article-card"><div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#1a3a2a,#2E5B4F);">📈</div><span class="card-tag tag-market">Market</span></div><div class="card-body"><div class="card-title">Why Most Retail Investors Lose Money</div><div class="card-excerpt">Three behavioural traps that destroy retail returns — and how to avoid them.</div><div class="card-meta"><span>May 8, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 8 min</span></div></div></div>
+        <div class="article-card"><div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#1c2a3a,#2a4060);">🏗️</div><span class="card-tag tag-civil">Engineering</span></div><div class="card-body"><div class="card-title">The Art of Estimating in Civil Engineering</div><div class="card-excerpt">How engineers deal with uncertainty — and why it's a transferable life skill.</div><div class="card-meta"><span>Apr 30, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 6 min</span></div></div></div>
+        <div class="article-card"><div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#3a2a10,#6b4f20);">💰</div><span class="card-tag tag-finance">Finance</span></div><div class="card-body"><div class="card-title">Salary to Surplus: Engineer's Wealth Guide</div><div class="card-excerpt">Making your monthly salary work harder — from someone who's done it.</div><div class="card-meta"><span>Apr 20, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 10 min</span></div></div></div>
+        <div class="article-card"><div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#1e1a2e,#3a2e5e);">🧠</div><span class="card-tag tag-blog">Mindset</span></div><div class="card-body"><div class="card-title">Systems Thinking for Everyday Life</div><div class="card-excerpt">How an engineer's mindset can transform how you approach every domain of life.</div><div class="card-meta"><span>Apr 14, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 7 min</span></div></div></div>
+        <div class="article-card"><div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#1a3a2a,#2E5B4F);">📊</div><span class="card-tag tag-market">Market</span></div><div class="card-body"><div class="card-title">Reading Balance Sheets Like an Engineer</div><div class="card-excerpt">Structural analysis and financial analysis share more than you'd think.</div><div class="card-meta"><span>May 2, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 9 min</span></div></div></div>
+        <div class="article-card"><div class="card-img"><div class="card-img-bg" style="background:linear-gradient(135deg,#3a2a10,#6b4f20);">🏛️</div><span class="card-tag tag-life">Life</span></div><div class="card-body"><div class="card-title">Discipline Over Motivation</div><div class="card-excerpt">Motivation fades. Systems keep the project moving regardless.</div><div class="card-meta"><span>Apr 25, 2026</span><span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 5 min</span></div></div></div>
+      </div>
+    </div>
+    <div class="footer" style="margin-top:24px;"><span>© 2026 Balram Shiwakoti</span></div>
+  </div>
+
+  <!-- CONTACT PAGE -->
+  <div class="page" id="page-contact">
+    <div class="contact-page">
+      <div class="page-heading">
+        <h1>Get in Touch</h1>
+        <p>Have a question, collaboration idea, or just want to say hello? I'd love to hear from you.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Let's connect</h3>
+          <p>Whether you're a fellow investor, engineer, student, or just someone who found an article useful — my inbox is always open. I try to respond within 48 hours.</p>
+          <div class="contact-detail">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+            hello@balramshiwakoti.com
+          </div>
+          <div class="contact-detail">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            linkedin.com/in/balramshiwakoti
+          </div>
+          <div class="contact-detail">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            @balramshiwakoti
+          </div>
+        </div>
+        <div class="contact-form">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input class="form-input" type="text" placeholder="John Doe"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="john@example.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input class="form-input" type="text" placeholder="Article feedback, collaboration, etc."/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" placeholder="Tell me what's on your mind…"></textarea>
+          </div>
+          <button class="btn-primary" style="width:100%;padding:12px;">Send Message →</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer" style="margin-top:32px;"><span>© 2026 Balram Shiwakoti</span></div>
+  </div>
+
+</main>
+
+<script>
+  // Theme
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+
+  // Pages
+  const breadcrumbs = { home: 'Home', about: 'About Me', articles: 'Articles', contact: 'Contact' };
+  function showPage(id, linkEl) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.getElementById('breadcrumb-text').textContent = breadcrumbs[id] || id;
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    if (linkEl) linkEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    closeSidebar();
+  }
+
+  // Dropdown
+  function toggleDropdown(navId, e) {
+    e.preventDefault();
+    const item = document.getElementById(navId);
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.nav-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Sidebar (mobile)
+  function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('overlay');
+    sb.classList.toggle('open');
+    ov.classList.toggle('show');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+  }
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
