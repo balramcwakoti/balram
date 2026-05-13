@@ -1,4 +1,6 @@
-
 title: Balram Blog
 description: My blog website
-publish_mode: editorial_workflow
+theme: minima
+
+plugins:
+  - jekyll-feed
