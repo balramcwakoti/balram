@@ -1,6 +1,6 @@
 ---
-title: Test Post
-date: 2026-05-12
+title: "My First Blog"
+date: 2026-05-13
 ---
 
-Hello this is my first blog!
+This is my first blog using Netlify CMS 🚀
