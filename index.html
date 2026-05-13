@@ -1024,59 +1024,61 @@
           </div>
         </div>
 
-        <div class="article-card">
-          <div class="card-img">
-            <div class="card-img-bg" style="background:linear-gradient(135deg,#1c2a3a,#2a4060);">🏗️</div>
-            <span class="card-tag tag-civil">Engineering</span>
-          </div>
-          <div class="card-body">
-            <div class="card-title">The Art of Estimating: How Engineers Think About Uncertainty</div>
-            <div class="card-excerpt">Precision is the enemy of good engineering. Learn how seasoned civil engineers handle unknowns without grinding to a halt.</div>
-            <div class="card-meta">
-              <div class="card-meta-left">
-                <span>Apr 30, 2026</span>
-                <span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 6 min</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="article-card">
-          <div class="card-img">
-            <div class="card-img-bg" style="background:linear-gradient(135deg,#3a2a10,#6b4f20);">💰</div>
-            <span class="card-tag tag-finance">Finance</span>
-          </div>
-          <div class="card-body">
-            <div class="card-title">Salary to Surplus: Building Wealth on an Engineer's Income</div>
-            <div class="card-excerpt">A practical, no-fluff guide to making your monthly salary work harder — from someone who's done it.</div>
-            <div class="card-meta">
-              <div class="card-meta-left">
-                <span>Apr 20, 2026</span>
-                <span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 10 min</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="article-card">
-          <div class="card-img">
-            <div class="card-img-bg" style="background:linear-gradient(135deg,#1e1a2e,#3a2e5e);">🧠</div>
-            <span class="card-tag tag-blog">Mindset</span>
-          </div>
-          <div class="card-body">
-            <div class="card-title">The Engineer's Mindset: Systems Thinking for Everyday Life</div>
-            <div class="card-excerpt">How thinking in systems — rather than events — transformed my approach to investing, health, and relationships.</div>
-            <div class="card-meta">
-              <div class="card-meta-left">
-                <span>Apr 14, 2026</span>
-                <span class="read-time"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> 7 min</span>
-              </div>
-            </div>
-          </div>
-        </div>
+
+
+
+
+
+
+
+        <div class="articles-grid">
+  {% for post in site.posts limit:6 %}
+  <div class="article-card">
+    
+    <div class="card-img">
+      <div class="card-img-bg" style="background:linear-gradient(135deg,#1a3a2a,#2E5B4F);">📝</div>
+      <span class="card-tag tag-blog">Blog</span>
+    </div>
+
+    <div class="card-body">
+      <div class="card-title">
+        <a href="{{ post.url }}" style="text-decoration:none; color:inherit;">
+          {{ post.title }}
+        </a>
+      </div>
+
+      <div class="card-excerpt">
+        {{ post.excerpt | strip_html | truncate: 120 }}
+      </div>
+
+      <div class="card-meta">
+        <span>{{ post.date | date: "%B %d, %Y" }}</span>
       </div>
     </div>
 
+  </div>
+  {% endfor %}
+        </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     <div class="newsletter">
       <div class="newsletter-text">
         <h3>Join 3,000+ curious readers</h3>
