@@ -1,8 +1,7 @@
 
 
 backend:
-  name: github
-  repo: balramcwakoti/balram
+  name: git-gateway
   branch: main
 
 media_folder: "images"
