@@ -1,6 +1,10 @@
-title: Balram Blog
-description: My blog website
+title: Balram News
+description: Latest News & Updates
 theme: minima
 
 plugins:
   - jekyll-feed
+
+collections:
+  posts:
+    output: true
